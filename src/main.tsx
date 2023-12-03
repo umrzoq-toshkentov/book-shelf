@@ -6,7 +6,7 @@ import { ThemeProvider } from "./providers";
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/book-shelf",
     element: <div>Hello world!</div>,
   },
 ]);
