@@ -1,25 +1,22 @@
 import { Button, Stack, TextField, Typography } from "@mui/material";
 import { useFormik } from "formik";
 import * as zod from "zod";
+import { toFormikValidationSchema } from "zod-formik-adapter";
 
 const validationSchema = zod.object({
-  email: zod
-    .string({ description: "Enter your email" })
-    .email("Enter a valid email"),
-  password: zod
-    .string({ description: "Enter your password" })
-    .min(8, "Password should be of minimum 8 characters length"),
+  firstName: zod.string().min(3).max(10).optional(),
+  lastName: zod.string().min(3).max(10).optional(),
 });
 
 export const FormikForm = () => {
   const formik = useFormik({
     initialValues: {
-      email: "foobar@example.com",
-      password: "foobar",
+      firstName: "",
+      lastName: "",
     },
-    validationSchema: validationSchema,
+    validationSchema: toFormikValidationSchema(validationSchema),
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+      console.log(values);
     },
   });
 
@@ -28,27 +25,16 @@ export const FormikForm = () => {
       <Typography variant="h5">Formik Form</Typography>
 
       <TextField
-        fullWidth
-        id="email"
-        name="email"
-        label="Email"
-        value={formik.values.email}
+        value={formik.values.firstName}
         onChange={formik.handleChange}
-        onBlur={formik.handleBlur}
-        error={formik.touched.email && Boolean(formik.errors.email)}
-        helperText={formik.touched.email && formik.errors.email}
+        name="firstName"
+        label="First Name"
       />
       <TextField
-        fullWidth
-        id="password"
-        name="password"
-        label="Password"
-        type="password"
-        value={formik.values.password}
+        value={formik.values.lastName}
         onChange={formik.handleChange}
-        onBlur={formik.handleBlur}
-        error={formik.touched.password && Boolean(formik.errors.password)}
-        helperText={formik.touched.password && formik.errors.password}
+        name="lastName"
+        label="Last Name"
       />
       <Button color="primary" variant="contained" fullWidth type="submit">
         Submit
