@@ -1,10 +1,18 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
 import { APIProvider, ThemeProvider } from "./providers";
 import { ErrorPage, HomePage } from "./pages";
 
 const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Navigate to="/book-shelf" />,
+  },
   {
     path: "/book-shelf",
     element: <HomePage />,

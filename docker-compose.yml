@@ -1,0 +1,7 @@
+version: "3.8"
+services:
+    reactapp:
+      build: ./dist
+      container_name: my-book
+      ports:
+        - '8080:8080'
