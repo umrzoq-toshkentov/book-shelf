@@ -2,17 +2,40 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-book
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Dependencies
+        run: yarn install
+
+      - name: Build Docker Image
+        run: docker build -t my-book-shelf .
+
+      - name: Log in to GitHub Container Registry
+        run: echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Tag Docker Image
+        run: docker tag my-book-shelf ghcr.io/${{ github.repository_owner }}/my-book-shelf:latest
+
+      - name: Push Docker Image
+        run: docker push ghcr.io/${{ github.repository_owner }}/my-book-shelf:latest
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: book-shelf-artifact
+          path: path/to/artifact
